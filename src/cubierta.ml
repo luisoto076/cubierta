@@ -186,14 +186,16 @@ let todos_terminaron hh =
 	!total = 0
 
 
-let genera_grafica n =
+let genera_grafica m n =
+	inicializa m;
 	let g = Grafica.initgraf n in
 	let x = ref 0 in
 	for i = 0 to n - 1 do
 		let y = ref (Random.int n) in
-		while (Grafica.conectados g !x !y) && (!x <> !y) do
+		while (!x = !y) || (Grafica.conectados g !x !y)   do
 			y := Random.int n;
 		done;
+		Printf.printf "%d %d cosososos\n" !x !y;
 		Grafica.conecta g !x !y;
 		x := !y
 	done;
@@ -210,9 +212,9 @@ let genera_grafica n =
 funcion principal de la aplicacion
 *)
 let () =
-	inicializa (int_of_string Sys.argv.(1));
 (*	let g = lee_grafica Sys.argv.(2) in*)
-	let g = genera_grafica (int_of_string Sys.argv.(2))in
+	let g = genera_grafica (int_of_string Sys.argv.(2)) (int_of_string Sys.argv.(3)) in
+	inicializa (int_of_string Sys.argv.(1));
 	let hormigas = init_hormigas g Conf.n_hormigas in
 	let tau = Array.make g.orden Conf.tau0 in
 	let general = ref [] in
@@ -240,7 +242,7 @@ let () =
 	Printf.printf "ACO:\n%!";
 	List.iter  (fun x -> Printf.printf "%d %!" x) !general;
 	Printf.printf "\nl:%d\n%!" (List.length !general);
-	To_neato.guarda g !general "grafica.gv";
+	To_neato.guarda g !general ("grafica" ^ Sys.argv.(1) ^ "-" ^ Sys.argv.(2) ^ "-" ^ Sys.argv.(3) ^ ".gv");
 	Greedy.greedy g
 	
 

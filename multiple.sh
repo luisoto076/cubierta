@@ -1,5 +1,6 @@
 #!/bin/bash
-for i in {4..10}
+for i in {0..100}
 do
-    eval "time ./cuvierta $i 100"
+    eval "time ./cubierta $i 0 10"
+    eval "dot grafica$i-0-10.gv -Tsvg > grafica$i-0-10.svg"
 done
