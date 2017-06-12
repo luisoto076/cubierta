@@ -191,7 +191,7 @@ let genera_grafica n =
 	let x = ref 0 in
 	for i = 0 to n - 1 do
 		let y = ref (Random.int n) in
-		while (Grafica.conectados g !x !y) || (!x = !y) do
+		while (Grafica.conectados g !x !y) && (!x <> !y) do
 			y := Random.int n;
 		done;
 		Grafica.conecta g !x !y;
@@ -200,7 +200,7 @@ let genera_grafica n =
 	for i = 1 to (5 * n) do
 		let a = Random.int n in
 		let b = Random.int n in
-		if not (Grafica.conectados g a b) then
+		if not (Grafica.conectados g a b) && (a <> b) then
 			Grafica.conecta g a b
 		else()
 	done;
