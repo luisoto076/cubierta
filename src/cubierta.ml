@@ -2,7 +2,7 @@
 open Grafica
 open Str
 open Greedy
-open Svg
+open To_neato
 
 exception Break
 
@@ -172,7 +172,7 @@ let mejor g hh =
 	let min_i = ref g.orden in
 	for i = 0 to Conf.n_hormigas - 1 do
 		let n = (List.length !(hh.(i).solucion)) in
-		if n < !min_i then
+		if n <= !min_i then
 			(min_l := !(hh.(i).solucion); min_i := n) 
 		else()
 	done;
@@ -191,7 +191,7 @@ let genera_grafica n =
 	let x = ref 0 in
 	for i = 0 to n - 1 do
 		let y = ref (Random.int n) in
-		while (Grafica.conectados g !x !y) do
+		while (Grafica.conectados g !x !y) || (!x = !y) do
 			y := Random.int n;
 		done;
 		Grafica.conecta g !x !y;
@@ -226,10 +226,10 @@ let () =
 		done;
 		let v1 = mejor g hormigas in
 		if (List.length v1) < !(general_l) then(
-			general_l := (List.length v1); general := v1
+			general_l := (List.length v1);
+			Array.iter (fun x -> Printf.printf "l:%d\n" (List.length !(x.solucion))) hormigas;
+			general := v1
 		)else (); 
-(*		List.iter  (fun x -> Printf.printf "%d %!" x) v1;*)
-(*		Printf.printf "\n%!";*)
 		actualiza_feromona_global g tau v1;
 (*		Array.iter (fun x -> Printf.printf "%d\n" (List.length !(x.solucion))) hormigas;*)
 		for k = 0 to Conf.n_hormigas-1 do
@@ -240,6 +240,7 @@ let () =
 	Printf.printf "ACO:\n%!";
 	List.iter  (fun x -> Printf.printf "%d %!" x) !general;
 	Printf.printf "\nl:%d\n%!" (List.length !general);
+	To_neato.guarda g !general "grafica.gv";
 	Greedy.greedy g
 	
 
