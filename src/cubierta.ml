@@ -195,11 +195,10 @@ let genera_grafica m n =
 		while (!x = !y) || (Grafica.conectados g !x !y)   do
 			y := Random.int n;
 		done;
-		Printf.printf "%d %d cosososos\n" !x !y;
 		Grafica.conecta g !x !y;
 		x := !y
 	done;
-	for i = 1 to (5 * n) do
+	for i = 1 to n + (n/4) do
 		let a = Random.int n in
 		let b = Random.int n in
 		if not (Grafica.conectados g a b) && (a <> b) then
@@ -212,8 +211,8 @@ let genera_grafica m n =
 funcion principal de la aplicacion
 *)
 let () =
-(*	let g = lee_grafica Sys.argv.(2) in*)
-	let g = genera_grafica (int_of_string Sys.argv.(2)) (int_of_string Sys.argv.(3)) in
+	let g = lee_grafica Sys.argv.(2) in
+(*	let g = genera_grafica (int_of_string Sys.argv.(2)) (int_of_string Sys.argv.(3)) in*)
 	inicializa (int_of_string Sys.argv.(1));
 	let hormigas = init_hormigas g Conf.n_hormigas in
 	let tau = Array.make g.orden Conf.tau0 in
@@ -229,7 +228,7 @@ let () =
 		let v1 = mejor g hormigas in
 		if (List.length v1) < !(general_l) then(
 			general_l := (List.length v1);
-			Array.iter (fun x -> Printf.printf "l:%d\n" (List.length !(x.solucion))) hormigas;
+(*			Array.iter (fun x -> Printf.printf "l:%d\n" (List.length !(x.solucion))) hormigas;*)
 			general := v1
 		)else (); 
 		actualiza_feromona_global g tau v1;
@@ -242,7 +241,7 @@ let () =
 	Printf.printf "ACO:\n%!";
 	List.iter  (fun x -> Printf.printf "%d %!" x) !general;
 	Printf.printf "\nl:%d\n%!" (List.length !general);
-	To_neato.guarda g !general ("grafica" ^ Sys.argv.(1) ^ "-" ^ Sys.argv.(2) ^ "-" ^ Sys.argv.(3) ^ ".gv");
-	Greedy.greedy g
+(*	To_neato.guarda g !general ("grafica" ^ Sys.argv.(1) ^ "-" ^ Sys.argv.(2) ^ "-" ^ Sys.argv.(3) ^ ".gv");*)
+	To_neato.guarda g !general ("grafica.gv");
 	
 

@@ -37,4 +37,5 @@ let greedy g =
 	done;
 	Printf.printf "Greedy:\n";
 	List.iter  (fun x -> Printf.printf "%d %!" x) !sol;
-	Printf.printf "\nl:%d\n%!" (List.length !sol)
+	Printf.printf "\nl:%d\n%!" (List.length !sol);
+	(List.length !sol)
