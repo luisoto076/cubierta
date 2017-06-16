@@ -1,0 +1,40 @@
+Instalación
+
+En una maquina con ubuntu 16.04 realizar el sieguiente proceso
+
+1.- Instalar Ocaml
+
+2.- Descargar el proyecto del repositorio, clonandolo o directamente de la pagina.
+https://github.com/luisoto076/cubierta.git
+
+En caso de querer clonarlo instalar git
+# sudo apt-get install git
+
+5.- entrar en la carpeta umbrales y ejecutar make. El proyecto cuenta con la opcion
+de construir make nc. Esto compila a codigo nativo.
+
+La documentación se genera con make ladoc
+
+6.- para ejecutar el programa
+#./cubierta
+se pasa como argumentos:
+
+-r | -g : modo de entrada, -g para que genere una grafica aletoria y -r para que lea un archivo con le formato
+          n
+          x,y
+          ...
+          donde n es el número de vertices y x,y son vertices que describen una arista
+
+seed : numero entero, semilla para operar la parte aletaria de la heuristica
+
+en caso de que el primer argumento sea -r
+	file : archivo que contiene la descripcion de la grafica
+
+en caso de que el primer argumento sea -g
+
+	seed_g : semilla para generar la gráfica aleatoria
+
+	size : tamaño de la grafica aleatoria
+
+El programa despliega en pantalla la cuvierta y su tamaño, generadas por ACO y por Greedy
+y un archivo con extencion .gv para la visualización de la gráfica

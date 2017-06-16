@@ -1,67 +1,137 @@
 graph G {
-	v0 -- v1
-	v0 -- v3
-	v0 -- v4
-	v0 -- v6
-	v0 -- v8
-	v0 -- v10
-	v0 -- v12
-	v0 -- v14
-	v1 -- v2
-	v1 -- v15
-	v1 -- v16
-	v1 -- v17
-	v1 -- v18
-	v1 -- v19
-	v2 -- v3
-	v3 -- v4
-	v3 -- v15
-	v3 -- v16
-	v3 -- v17
-	v3 -- v18
-	v4 -- v5
-	v4 -- v15
+	v0 -- v11
+	v0 -- v49
+	v1 -- v3
+	v1 -- v6
+	v1 -- v10
+	v2 -- v38
+	v2 -- v42
+	v3 -- v13
+	v3 -- v24
+	v3 -- v26
+	v3 -- v47
+	v4 -- v7
+	v4 -- v14
 	v4 -- v16
-	v4 -- v17
-	v4 -- v18
-	v5 -- v6
-	v6 -- v7
-	v6 -- v15
+	v4 -- v23
+	v4 -- v25
+	v4 -- v45
+	v4 -- v47
+	v4 -- v48
+	v5 -- v13
+	v5 -- v14
+	v5 -- v24
+	v5 -- v42
+	v6 -- v13
 	v6 -- v16
 	v6 -- v17
-	v6 -- v18
-	v7 -- v8
-	v8 -- v9
-	v8 -- v15
-	v8 -- v16
-	v8 -- v17
-	v8 -- v18
-	v9 -- v10
-	v10 -- v11
-	v10 -- v15
-	v10 -- v16
-	v10 -- v17
-	v10 -- v18
-	v11 -- v12
-	v12 -- v13
-	v12 -- v15
-	v12 -- v16
-	v12 -- v17
-	v12 -- v18
+	v6 -- v24
+	v6 -- v28
+	v6 -- v32
+	v7 -- v12
+	v7 -- v22
+	v7 -- v24
+	v7 -- v33
+	v7 -- v38
+	v7 -- v39
+	v8 -- v14
+	v8 -- v20
+	v9 -- v25
+	v9 -- v27
+	v9 -- v48
+	v10 -- v20
+	v10 -- v39
+	v10 -- v42
+	v10 -- v47
+	v11 -- v21
+	v11 -- v27
+	v12 -- v30
+	v12 -- v36
+	v12 -- v44
 	v13 -- v14
-	v14 -- v15
-	v14 -- v16
-	v14 -- v17
-	v14 -- v18
-	v14 -- v19
-v10 [style=filled, fillcolor=red];
+	v13 -- v15
+	v13 -- v19
+	v13 -- v21
+	v13 -- v30
+	v13 -- v37
+	v13 -- v38
+	v13 -- v39
+	v13 -- v42
+	v14 -- v21
+	v14 -- v22
+	v14 -- v23
+	v14 -- v36
+	v14 -- v38
+	v15 -- v22
+	v15 -- v27
+	v15 -- v30
+	v16 -- v23
+	v16 -- v36
+	v17 -- v30
+	v17 -- v46
+	v18 -- v31
+	v18 -- v38
+	v18 -- v45
+	v19 -- v36
+	v20 -- v30
+	v20 -- v36
+	v20 -- v39
+	v20 -- v45
+	v20 -- v48
+	v21 -- v33
+	v21 -- v36
+	v21 -- v46
+	v21 -- v47
+	v22 -- v37
+	v22 -- v47
+	v23 -- v49
+	v24 -- v32
+	v25 -- v43
+	v26 -- v37
+	v27 -- v38
+	v27 -- v47
+	v28 -- v37
+	v29 -- v44
+	v30 -- v35
+	v30 -- v37
+	v30 -- v39
+	v30 -- v42
+	v31 -- v49
+	v32 -- v45
+	v32 -- v46
+	v33 -- v38
+	v36 -- v39
+	v36 -- v47
+	v39 -- v44
+	v42 -- v46
+	v42 -- v48
 v3 [style=filled, fillcolor=red];
-v14 [style=filled, fillcolor=red];
-v4 [style=filled, fillcolor=red];
-v6 [style=filled, fillcolor=red];
-v12 [style=filled, fillcolor=red];
+v44 [style=filled, fillcolor=red];
+v31 [style=filled, fillcolor=red];
+v45 [style=filled, fillcolor=red];
+v38 [style=filled, fillcolor=red];
 v1 [style=filled, fillcolor=red];
-v8 [style=filled, fillcolor=red];
-A8 [style=filled, fillcolor=yellow];
-G13 [style=filled, fillcolor=blue];
+v21 [style=filled, fillcolor=red];
+v36 [style=filled, fillcolor=red];
+v10 [style=filled, fillcolor=red];
+v43 [style=filled, fillcolor=red];
+v9 [style=filled, fillcolor=red];
+v22 [style=filled, fillcolor=red];
+v7 [style=filled, fillcolor=red];
+v12 [style=filled, fillcolor=red];
+v13 [style=filled, fillcolor=red];
+v30 [style=filled, fillcolor=red];
+v24 [style=filled, fillcolor=red];
+v37 [style=filled, fillcolor=red];
+v20 [style=filled, fillcolor=red];
+v27 [style=filled, fillcolor=red];
+v46 [style=filled, fillcolor=red];
+v4 [style=filled, fillcolor=red];
+v23 [style=filled, fillcolor=red];
+v0 [style=filled, fillcolor=red];
+v6 [style=filled, fillcolor=red];
+v14 [style=filled, fillcolor=red];
+v42 [style=filled, fillcolor=red];
+A27 [style=filled, fillcolor=yellow];
+G26 [style=filled, fillcolor=blue];
 }

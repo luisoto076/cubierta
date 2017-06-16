@@ -1,15 +1,22 @@
 (**Modulo principal que implementa la heristica de aceptacion por umbrales*)
-open Grafica
-open Str
-open Greedy
-open To_neato
 
+open Grafica
+open Greedy
+open To_dot
+
+(**Exepcion para emular la insruccion para salir de un ciclo*)
 exception Break
+
+exception OpcionIncorrecta of string
 
 type hormiga = {solucion: int list ref ; vertice: int ref; aristas : int array array; sin_cubrir: int ref}
 
-let inicializa v = Random.init v
-
+(**
+	Inicializa el arreglo de hormigas relacionadas con la grafica que se pasa como argumento
+	@param g grafica
+	@param n numero de hormigas que se crearan
+	@return arreglo de hormigas de tamano n
+*)
 let init_hormigas g n =
 	let h_aux = {solucion = ref []; vertice = ref (-1); aristas = [|[||]|]; sin_cubrir = ref 0} in
 	let hormigas = Array.make Conf.n_hormigas h_aux in
@@ -26,42 +33,7 @@ let init_hormigas g n =
 			done
 		done
 	done;
-	hormigas
-
-let print g =
-	for i = 0 to g.orden-1 do
-		for j = 0 to g.orden-1 do
-			if (g.aristas.(i).(j)) then
-				Printf.printf ("%d %d\n%!") i j
-			else ()
-		done
-	done
-
-(**
-	Funcion que lee el archivo que se pasa como argumento y construye solucion inicial
-	con la que se trabajara la heuristica
-*)	
-let lee_grafica archivo =
-  	let ic = open_in archivo in
-  	let g = ref {aristas = [|[||]|] ; orden = 0; tamano = ref 0} in
-  	try 
-  		let line = input_line ic in
-    	let n = int_of_string(line) in
-    	g := Grafica.initgraf n;
-    	let re = Str.regexp "[ ]*,[ ]*" in
-    	while true do
-    		let arista = Str.split re (input_line ic) in
-    		let line1 = List.nth arista 0 in
-    		let line2 = List.nth arista 1 in
-    		let u = int_of_string line1 in
-    		let v = int_of_string line2 in
-    		Grafica.conecta !g u v
-    	done;
-    	!g
-    with
-    	|End_of_file -> close_in ic; !g           
-  	 	|e -> close_in_noerr ic;raise e
-                                    
+	hormigas                        
 
 let psi g hh k i j it =
 	if (hh.(k).aristas.(i).(j) = it) then
@@ -142,7 +114,6 @@ let siguiente_vertice g hh tau it =
 					
 						for j = 0 to g.orden-1 do
 							let r = Random.float 1. in
-(*							Printf.printf "%f %f %f\n%!" r (te.(j) /. !sum) !sum;*)
 							if r <= (te.(j) /. !sum) && not(List.mem j !(hh.(i).solucion)) then(
 								nv := j;
 								raise Break
@@ -167,6 +138,11 @@ let actualiza_feromona_global g tau v1 =
 			tau.(i) <- (1. -. Conf.phi) *. tau.(i) 
 	done;()
 
+(**
+	obtiene la solucion conformada por la menor cantidad de vertices
+	@param g grafica
+	@param hh arreglo de hormigas
+*)
 let mejor g hh =
 	let min_l = ref [] in
 	let min_i = ref g.orden in
@@ -178,6 +154,11 @@ let mejor g hh =
 	done;
 	!min_l 
 	
+(**
+	indica si todas las hormigas terminaron de construir su cubierta
+	@param hh arreglo de hormigas
+	@return verdadero si todas las soliciones son cubiertas de la grafica
+*)
 let todos_terminaron hh =
 	let total = ref 0 in
 	for k = 0 to Conf.n_hormigas-1 do
@@ -186,34 +167,23 @@ let todos_terminaron hh =
 	!total = 0
 
 
-let genera_grafica m n =
-	inicializa m;
-	let g = Grafica.initgraf n in
-	let x = ref 0 in
-	for i = 0 to n - 1 do
-		let y = ref (Random.int n) in
-		while (!x = !y) || (Grafica.conectados g !x !y)   do
-			y := Random.int n;
-		done;
-		Grafica.conecta g !x !y;
-		x := !y
-	done;
-	for i = 1 to n + (n/4) do
-		let a = Random.int n in
-		let b = Random.int n in
-		if not (Grafica.conectados g a b) && (a <> b) then
-			Grafica.conecta g a b
-		else()
-	done;
-	g
 	
 (**
 funcion principal de la aplicacion
 *)
 let () =
-	let g = lee_grafica Sys.argv.(2) in
-(*	let g = genera_grafica (int_of_string Sys.argv.(2)) (int_of_string Sys.argv.(3)) in*)
-	inicializa (int_of_string Sys.argv.(1));
+	let grafica = ref {aristas = [||]; orden = 0; tamano = ref 0} in 
+	if Sys.argv.(1) = "-g" then (
+		grafica := genera_grafica (int_of_string Sys.argv.(3)) (int_of_string Sys.argv.(4));
+	)else (
+		if Sys.argv.(1) = "-r" then (
+			grafica := lee_grafica Sys.argv.(3);
+		)else(
+			raise (OpcionIncorrecta (Sys.argv.(3)))
+		)
+	);
+	Random.init (int_of_string Sys.argv.(2));
+	let g = !grafica in
 	let hormigas = init_hormigas g Conf.n_hormigas in
 	let tau = Array.make g.orden Conf.tau0 in
 	let general = ref [] in
@@ -228,11 +198,9 @@ let () =
 		let v1 = mejor g hormigas in
 		if (List.length v1) < !(general_l) then(
 			general_l := (List.length v1);
-(*			Array.iter (fun x -> Printf.printf "l:%d\n" (List.length !(x.solucion))) hormigas;*)
 			general := v1
 		)else (); 
 		actualiza_feromona_global g tau v1;
-(*		Array.iter (fun x -> Printf.printf "%d\n" (List.length !(x.solucion))) hormigas;*)
 		for k = 0 to Conf.n_hormigas-1 do
 			hormigas.(k).sin_cubrir := !(g.tamano);
 			hormigas.(k).solucion := []
@@ -241,7 +209,6 @@ let () =
 	Printf.printf "ACO:\n%!";
 	List.iter  (fun x -> Printf.printf "%d %!" x) !general;
 	Printf.printf "\nl:%d\n%!" (List.length !general);
-(*	To_neato.guarda g !general ("grafica" ^ Sys.argv.(1) ^ "-" ^ Sys.argv.(2) ^ "-" ^ Sys.argv.(3) ^ ".gv");*)
-	To_neato.guarda g !general ("grafica.gv");
+	To_dot.guarda g !general ("grafica.gv");
 	
 

@@ -1,3 +1,5 @@
+(**Módulo para calcular la cuvierta de vertices mediante un algoritmo glotón o greedy*)
+
 open Grafica
 
 let max_deg g =
@@ -26,12 +28,16 @@ let elimina g md =
 		)
 		else()	
 	done
-
+	
+(**
+	calcula la cuvierta de la grafica que recive como argumento
+	@param g grafica de la que se obtendra la cuvierta
+	@return lista de indices de los vertices que conforman la cuvierta
+*)
 let greedy g = 
 	let sol = ref [] in
 	while !(g.tamano) <> 0 do
 		let md = max_deg g in
-(*		Printf.printf "loop infinito %d\n" md;*)
 		sol := md :: !sol;
 		elimina g md;
 	done;

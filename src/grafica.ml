@@ -2,6 +2,8 @@
 Modulo para representar graficas de ciudades
 *)
 
+open Str
+
 (**Exepcion para indicar errores en las operaciones de la grafica*)
 exception ErrorGrafica of string
 
@@ -23,26 +25,11 @@ let initgraf n =
 	{aristas=a; orden = n; tamano = ref 0}
 
 (**
-funcion para agregar una ciudad a la grafica
-@param g grafica a la que se agregara la ciudad
-@param v ciudad que se agregara
-*)
-(*let agrega g v = g.orden := !(g.orden) + 1; g.vertices.(!(g.orden)) <- v*)
-
-(**
 Valida si es posible conectar dos nodos o si ya existe una arista que los une en esa direccion
 @param ht hashtable que contiene vecinos
 @param e el elemento a buscar
 *)                   
 let conectados g u v = g.aristas.(u).(v)
-
-(**
-regresa el peso de la arsita entre dos nodos a partir del indice de ambos
-@param g grafica
-@param u verice
-@param v verice
-*)
-let getPeso g u v = g.aristas.(u).(v)
                 
 (**
 conecta dos nodos de una grafica. Al conecta los nodos i y j se agrega a la entrada i del arreglo
@@ -65,4 +52,66 @@ let conecta g a b = let n = g.orden in
                         	)else
                         		raise(ErrorGrafica "Vertices ya conectados")
                             
+(**
+	Genera una grafica con aristas aleatorias, con la semilla y el tamanio que se pasan como
+	argumento
+	@param m semilla
+	@param n numero de vertices de la grafica
+	@return grafica construida
+*)
+let genera_grafica m n =
+	Random.init m;
+	let g = initgraf n in
+	let x = ref 0 in
+	for i = 0 to n - 1 do
+		let y = ref (Random.int n) in
+		while (!x = !y) || (conectados g !x !y)   do
+			y := Random.int n;
+		done;
+		conecta g !x !y;
+		x := !y
+	done;
+	for i = 1 to n + (n/4) do
+		let a = Random.int n in
+		let b = Random.int n in
+		if not (conectados g a b) && (a <> b) then
+			conecta g a b
+		else()
+	done;
+	g
+
+
+(**
+	Funcion que lee el archivo que se pasa como argumento y construye solucion inicial
+	con la que se trabajara la heuristica
+*)	
+let lee_grafica archivo =
+  	let ic = open_in archivo in
+  	let g = ref {aristas = [|[||]|] ; orden = 0; tamano = ref 0} in
+  	try 
+  		let line = input_line ic in
+    	let n = int_of_string(line) in
+    	g := initgraf n;
+    	let re = Str.regexp "[ ]*,[ ]*" in
+    	while true do
+    		let arista = Str.split re (input_line ic) in
+    		let line1 = List.nth arista 0 in
+    		let line2 = List.nth arista 1 in
+    		let u = int_of_string line1 in
+    		let v = int_of_string line2 in
+    		conecta !g u v
+    	done;
+    	!g
+    with
+    	|End_of_file -> close_in ic; !g           
+  	 	|e -> close_in_noerr ic;raise e
+
+let print g =
+	for i = 0 to g.orden-1 do
+		for j = 0 to g.orden-1 do
+			if (g.aristas.(i).(j)) then
+				Printf.printf ("%d %d\n%!") i j
+			else ()
+		done
+	done
 
